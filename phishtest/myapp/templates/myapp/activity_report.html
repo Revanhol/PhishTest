@@ -1,0 +1,30 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Взаимодействие пользователей с фишинговыми письмами{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Взаимодействие пользователей с фишинговыми письмами</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Пользователь</th>
+                    <th>Действие</th>
+                    <th>Цель</th>
+                    <th>Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for action in actions %}
+                    <tr>
+                        <td>{{ action.actor.userprofile.get_full_name_with_username }}</td>
+                        <td>{{ action.verb }}</td>
+                        <td>{{ action.target }}</td>
+                        <td>{{ action.timestamp }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

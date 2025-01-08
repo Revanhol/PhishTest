@@ -1,0 +1,28 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Результаты тестов{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Результаты тестов</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Тест</th>
+                    <th>Оценка</th>
+                    <th>Завершено</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user_test in user_tests %}
+                    <tr>
+                        <td>{{ user_test.test.title }}</td>
+                        <td>{{ user_test.score }}%</td>
+                        <td>{{ user_test.completed_at }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

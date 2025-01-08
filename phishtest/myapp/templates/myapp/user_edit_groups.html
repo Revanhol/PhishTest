@@ -1,0 +1,22 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Редактирование групп пользователя{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Редактировать группу</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="groups">Группы</label>
+                <select class="form-control" id="groups" name="groups" multiple>
+                    {% for group in groups %}
+                        <option value="{{ group.pk }}" {% if group in user.groups.all %}selected{% endif %}>{{ group.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    </div>
+{% endblock %}

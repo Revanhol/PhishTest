@@ -1,0 +1,32 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Прогресс пользователя{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Прогресс</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Курс</th>
+                    <th>Средний счет</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in progress_data %}
+                    <tr>
+                        <td>{{ data.course.title }}</td>
+                        <td>
+                            {% if data.average_score is not None %}
+                                {{ data.average_score }}%
+                            {% else %}
+                                Нет завершенных тестов
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

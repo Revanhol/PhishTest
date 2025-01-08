@@ -1,0 +1,74 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Список курсов{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Список курсов</h1>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <input type="text" class="form-control" id="search" placeholder="Поиск по названию">
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" id="sort">
+                    <option value="title">Сортировать по названию</option>
+                    <option value="created_at">Сортировать по дате создания</option>
+                </select>
+            </div>
+        </div>
+        <div class="row" id="course-list">
+            {% for course in courses %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        {% if course.image %}
+                            <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}">
+                        {% else %}
+                            <img src="{% static 'images/default_course.png' %}" class="card-img-top" alt="{{ course.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ course.title }}</h5>
+                            <p class="card-text">{{ course.description|truncatewords:20 }}</p>
+                            <a href="{% url 'course_detail' course.id %}" class="btn btn-primary">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        document.getElementById('search').addEventListener('input', function() {
+            let query = this.value.toLowerCase();
+            let courseList = document.getElementById('course-list');
+            let courses = courseList.getElementsByClassName('col-md-4');
+            for (let course of courses) {
+                let title = course.getElementsByClassName('card-title')[0].innerText.toLowerCase();
+                if (title.includes(query)) {
+                    course.style.display = '';
+                } else {
+                    course.style.display = 'none';
+                }
+            }
+        });
+        document.getElementById('sort').addEventListener('change', function() {
+            let sortBy = this.value;
+            let courseList = document.getElementById('course-list');
+            let courses = Array.from(courseList.getElementsByClassName('col-md-4'));
+            courses.sort((a, b) => {
+                let aTitle = a.getElementsByClassName('card-title')[0].innerText.toLowerCase();
+                let bTitle = b.getElementsByClassName('card-title')[0].innerText.toLowerCase();
+                if (sortBy === 'title') {
+                    return aTitle.localeCompare(bTitle);
+                } else if (sortBy === 'created_at') {
+                    let aDate = new Date(a.getElementsByClassName('card-text')[0].innerText);
+                    let bDate = new Date(b.getElementsByClassName('card-text')[0].innerText);
+                    return bDate - aDate;
+                }
+            });
+            courseList.innerHTML = '';
+            for (let course of courses) {
+                courseList.appendChild(course);
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Отчет по результатам тестов{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Отчет по результатам тестов</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Пользователь</th>
+                    <th>Тест</th>
+                    <th>Результат</th>
+                    <th>Завершено</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    <tr>
+                        <td>{{ result.user.username }}</td>
+                        <td>{{ result.test.title }}</td>
+                        <td>{{ result.score }}%</td>
+                        <td>{{ result.completed_at }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h2 class="mt-4">Средний результат</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Тест</th>
+                    <th>Средний результат</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in average_scores %}
+                    <tr>
+                        <td>{{ score.test__title }}</td>
+                        <td>{{ score.avg_score }}%</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Результаты тестов{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Результат</h1>
+        <p>Ваш результат: {{ score }}%</p>
+        <a href="{% url 'course_detail' test.course.id %}" class="btn btn-secondary mt-3">Назад к курсу</a>
+    </div>
+{% endblock %}

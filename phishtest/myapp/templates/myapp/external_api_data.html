@@ -1,0 +1,9 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}External API Data{% endblock %}
+
+{% block content %}
+    <h1>External API Data</h1>
+    <pre>{{ data|safe }}</pre>
+{% endblock %}

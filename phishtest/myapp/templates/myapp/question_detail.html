@@ -1,0 +1,18 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}{{ question.text }}{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">{{ question.text }}</h1>
+        <h2>Ответы</h2>
+        <ul class="list-group">
+            {% for answer in question.answers.all %}
+                <li class="list-group-item">{{ answer.text }} (Correct: {{ answer.is_correct }})</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'answer_create' question.id %}" class="btn btn-primary mt-3">Добавить ответ</a>
+        <a href="{% url 'test_detail' question.test.id %}" class="btn btn-secondary mt-3">Назад к тесту</a>
+    </div>
+{% endblock %}

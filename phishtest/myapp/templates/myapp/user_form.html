@@ -1,0 +1,14 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Пользователи{% endblock %}
+
+{% block content %}
+    <h1>{{ form.instance.pk|yesno:"Редактировать пользователя,Добавить пользователя" }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Сохранить</button>
+    </form>
+    <a href="{% url 'user_list' %}">Отмена</a>
+{% endblock %}

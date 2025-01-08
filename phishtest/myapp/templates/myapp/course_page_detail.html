@@ -1,0 +1,19 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4">{{ page.title }}</h1>
+        <p>{{ page.content|safe }}</p>
+        {% if previous_page %}
+            <a href="{% url 'course_page_detail' course.id previous_page.id %}" class="btn btn-secondary">Назад</a>
+        {% endif %}
+        {% if next_page %}
+            <a href="{% url 'course_page_detail' course.id next_page.id %}" class="btn btn-secondary">Вперед</a>
+        {% endif %}
+        <a href="{% url 'course_page_update' course.id page.id %}" class="btn btn-primary mt-3">Редактировать страницу</a>
+        <a href="{% url 'course_detail' course.id %}" class="btn btn-secondary mt-3">Назад к курсу</a>
+    </div>
+{% endblock %}

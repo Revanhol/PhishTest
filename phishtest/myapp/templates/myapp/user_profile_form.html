@@ -1,0 +1,14 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Редактировать профиль пользователя{% endblock %}
+
+{% block content %}
+    <h1>Edit User Profile</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Сохранить</button>
+    </form>
+    <a href="{% url 'user_detail' user_profile.user.pk %}">Назад</a>
+{% endblock %}

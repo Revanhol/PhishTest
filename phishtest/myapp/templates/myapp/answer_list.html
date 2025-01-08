@@ -1,0 +1,17 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Список вопросов{% endblock %}
+
+{% block content %}
+    <h1>Answers for Question: {{ question_pk }}</h1>
+    <a href="{% url 'answer_create' question_pk=question_pk %}">Добавить вопрос</a>
+    <ul>
+        {% for answer in answers %}
+            <li>
+                <a href="{% url 'answer_update' answer.pk %}">{{ answer.text }}</a>
+                <a href="{% url 'answer_delete' answer.pk %}">Удалить</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

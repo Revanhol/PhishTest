@@ -1,0 +1,14 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Подтверждение удаления вопроса{% endblock %}
+
+{% block content %}
+    <h1>Удалить</h1>
+    <p>Вы уверены что хотите удалить "{{ question.text }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Подтвердить</button>
+    </form>
+    <a href="{% url 'question_list' test_pk=question.test.pk %}">Отмена</a>
+{% endblock %}
