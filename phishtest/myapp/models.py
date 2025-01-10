@@ -43,7 +43,7 @@ class Answer(models.Model):
 class UserTest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
-    score = models.FloatField()  # Результат теста в процентах
+    score = models.FloatField()
     completed_at = models.DateTimeField(auto_now_add=True)
 
 class TestResult(models.Model):

@@ -34,13 +34,11 @@ def create_user(request):
     if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
-        password = get_random_string(length=10)  # Генерация одноразового пароля
+        password = get_random_string(length=10)
         user = User.objects.create_user(username=username, email=email, password=password)
 
-        # Создание профиля пользователя
         UserProfile.objects.create(user=user)
 
-        # Отправка данных для входа по электронной почте
         send_mail(
             'Your login credentials',
             f'Ваш username: {username}\nВаш пароль: {password}\nПожалуйста измените ваш пароль после первого входа.',
@@ -58,7 +56,7 @@ def change_password(request):
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)  # Обновление сессии пользователя
+            update_session_auth_hash(request, user)
             return redirect('home')
     else:
         form = PasswordChangeForm(request.user)
@@ -111,8 +109,6 @@ def course_page_create_update(request, course_id, page_id=None):
 def course_page_detail(request, course_id, page_id):
     course = get_object_or_404(Course, id=course_id)
     page = get_object_or_404(CoursePage, id=page_id, course=course)
-
-    # Получите предыдущую и следующую страницы
     pages = list(course.pages.all())
     current_index = pages.index(page)
 
@@ -262,15 +258,13 @@ def send_phishing_email(request):
                 settings.DEFAULT_FROM_EMAIL,
                 recipients
             )
-            email.content_subtype = "html"  # Убедитесь, что письмо отправляется в формате HTML
+            email.content_subtype = "html"
             if 'attachment' in request.FILES:
                 email.attach(request.FILES['attachment'].name, request.FILES['attachment'].read(), request.FILES['attachment'].content_type)
 
-            # Добавляем параметры отслеживания в ссылки
             tracking_url = reverse('track_phishing_email', kwargs={'email_id': phishing_email.id, 'user_id': user.id if user else group.id})
             email.body = email.body + f"\n\n<a href='{settings.BASE_URL}{tracking_url}'>Нажмите здесь для активации вашего аккаунта</a>"
 
-            # Добавляем пиксель отслеживания
             tracking_pixel_url = reverse('track_email_open', kwargs={'email_id': phishing_email.id, 'user_id': user.id if user else group.id})
             email.body = email.body + f"\n\n<img src='{settings.BASE_URL}{tracking_pixel_url}' alt='' width='1' height='1' style='display:none;'>"
 
@@ -290,13 +284,8 @@ def track_phishing_email(request, email_id, user_id):
 
 class TrackEmailOpenView(View):
     def get(self, request, email_id, user_id):
-        # Получаем объект письма
         email = get_object_or_404(PhishingEmail, id=email_id)
-
-        # Логируем действие открытия письма
         follow(request.user, email, 'открыл фишинговое сообщение', timestamp=timezone.now())
-
-        # Возвращаем пустой ответ
         return HttpResponse(status=204)
 
 def track_email_open(request, email_id, user_id):

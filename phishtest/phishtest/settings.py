@@ -7,12 +7,12 @@ BASE_URL = os.getenv('BASE_URL', 'http://127.0.0.1:8000')
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'your-secret-key'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False').lower() in ['true', '1', 't']
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -27,8 +27,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'myapp.apps.MyAppConfig',  # Добавьте ваше приложение
-    'actstream',  # Для отслеживания активности
+    'myapp.apps.MyAppConfig',
+    'actstream',
 ]
 
 MIDDLEWARE = [
@@ -39,7 +39,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',  # Добавьте эту строку
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'phishtest.urls'
@@ -47,7 +47,7 @@ ROOT_URLCONF = 'phishtest.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Убедитесь, что этот путь правильный
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,14 +66,13 @@ WSGI_APPLICATION = 'phishtest.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydatabase',
-        'USER': 'postgres',  # Или имя пользователя, которое вы используете
-        'PASSWORD': 'admin',  # Пароль, который вы указали при установке
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('POSTGRES_DB', 'mydatabase'),
+        'USER': os.getenv('POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'admin'),
+        'HOST': os.getenv('POSTGRES_HOST', 'db'),
+        'PORT': os.getenv('POSTGRES_PORT', '5432'),
     }
 }
-
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -107,7 +106,7 @@ LANGUAGES = [
 ]
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -125,18 +124,18 @@ LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True
 
-# Email settings
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'chotaopa@gmail.com'
-EMAIL_HOST_PASSWORD = 'okdr mloo kfht qhkx'  # Используйте пароль приложения, если у вас включена двухфакторная аутентификация
+EMAIL_HOST_PASSWORD = 'okdr mloo kfht qhkx'
 DEFAULT_FROM_EMAIL = 'chotaopa@gmail.com'
 
 
-# Activity Stream settings
+
 ACTSTREAM_SETTINGS = {
     'MANAGER': 'myapp.managers.MyActionManager',
     'FETCH_RELATIONS': True,
@@ -146,3 +145,4 @@ ACTSTREAM_SETTINGS = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+

@@ -1,6 +1,6 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
-from .views import create_user, change_password, TrackEmailOpenView, activity_report, course_detail, course_create_update, course_page_create_update, course_page_detail
+from .views import TrackEmailOpenView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
