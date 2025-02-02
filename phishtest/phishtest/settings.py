@@ -1,19 +1,21 @@
 import os
 from pathlib import Path
+from django.core.management.utils import get_random_secret_key
 
-
-BASE_URL = os.getenv('BASE_URL', 'http://127.0.0.1:8000')
+BASE_URL = os.getenv('BASE_URL', 'http://localhost:8080')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() in ['true', '1', 't']
 
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
-
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8080',  # Добавьте ваш домен или IP-адрес
+]
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -42,7 +44,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
-ROOT_URLCONF = 'phishtest.urls'
+ROOT_URLCONF = 'phishtest.phishtest.urls'
 
 TEMPLATES = [
     {
@@ -106,7 +108,10 @@ LANGUAGES = [
 ]
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+if DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

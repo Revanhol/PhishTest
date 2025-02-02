@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from .views import TrackEmailOpenView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
@@ -12,7 +11,7 @@ urlpatterns = [
     path('courses/', views.course_list, name='course_list'),
     path('course/<int:course_id>/', views.course_detail, name='course_detail'),
     path('course/create/', views.course_create_update, name='course_create'),
-    path('course/<int:course_id>/update/', views.course_create_update, name='course_update'),
+    path('course/<int:course_id>/update/', views.course_update, name='course_update'),
     path('course/<int:course_id>/delete/', views.course_delete, name='course_delete'),
     path('course/<int:course_id>/page/create/', views.course_page_create_update, name='course_page_create'),
     path('course/<int:course_id>/page/<int:page_id>/update/', views.course_page_create_update, name='course_page_update'),
@@ -33,7 +32,7 @@ urlpatterns = [
     path('answer/<int:answer_id>/delete/', views.answer_delete, name='answer_delete'),
     path('send_phishing_email/', views.send_phishing_email, name='send_phishing_email'),
     path('track_phishing_email/<int:email_id>/<int:user_id>/', views.track_phishing_email, name='track_phishing_email'),
-    path('track_email_open/<int:email_id>/<int:user_id>/', TrackEmailOpenView.as_view(), name='track_email_open'),
+    path('track_email_open/<int:email_id>/<int:user_id>/', views.TrackEmailOpenView.as_view(), name='track_email_open'),
     path('download_phishing_attachment/<int:email_id>/<int:user_id>/', views.download_phishing_attachment, name='download_phishing_attachment'),
     path('activity_report/', views.activity_report, name='activity_report'),
     path('test/<int:test_id>/take/', views.take_test, name='take_test'),
@@ -56,7 +55,10 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('signup/', views.user_create, name='signup'),
+    path('track_phishing_email/<int:email_id>/<int:user_id>/', views.track_phishing_email, name='track_phishing_email'),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

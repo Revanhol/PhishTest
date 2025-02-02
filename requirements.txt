@@ -5,3 +5,4 @@ django-activity-stream
 djangorestframework
 requests
 Pillow
+gunicorn

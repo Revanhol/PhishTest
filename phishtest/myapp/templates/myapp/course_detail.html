@@ -30,8 +30,12 @@
                         </li>
                     {% endfor %}
                 </ul>
+                <a href="{% url 'course_page_create' course.id %}" class="btn btn-primary mt-3">Добавить новую страницу</a>
+                <a href="{% url 'course_update' course.id %}" class="btn btn-secondary mt-3">Редактировать курс</a>
+                <a href="{% url 'course_delete' course.id %}" class="btn btn-danger mt-3">Удалить курс</a>
                 <a href="{% url 'course_list' %}" class="btn btn-secondary mt-3">Назад к списку курсов</a>
             </div>
         </div>
     </div>
 {% endblock %}
+

@@ -88,6 +88,19 @@ def course_create_update(request, course_id=None):
 
     return render(request, 'myapp/course_form.html', {'form': form})
 
+@login_required
+@permission_required('myapp.change_course', raise_exception=True)
+def course_update(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    if request.method == 'POST':
+        form = CourseForm(request.POST, request.FILES, instance=course)
+        if form.is_valid():
+            form.save()
+            return redirect('course_detail', course_id=course.id)
+    else:
+        form = CourseForm(instance=course)
+    return render(request, 'myapp/course_form.html', {'form': form, 'course': course})
+
 def course_page_create_update(request, course_id, page_id=None):
     course = get_object_or_404(Course, id=course_id)
     if page_id:
@@ -124,9 +137,9 @@ def course_page_detail(request, course_id, page_id):
 
 @login_required
 @permission_required('myapp.delete_course', raise_exception=True)
-def course_delete(request, pk):
-    course = get_object_or_404(Course, pk=pk)
-    if request.method == "POST":
+def course_delete(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    if request.method == 'POST':
         course.delete()
         return redirect('course_list')
     return render(request, 'myapp/course_confirm_delete.html', {'course': course})
@@ -280,7 +293,8 @@ def track_phishing_email(request, email_id, user_id):
     phishing_email = get_object_or_404(PhishingEmail, id=email_id)
     user = get_object_or_404(User, id=user_id)
     action.send(user, verb='перешел по фишинговой ссылке', target=phishing_email)
-    return redirect('home')
+    return render(request, 'myapp/phishing_alert.html')
+
 
 class TrackEmailOpenView(View):
     def get(self, request, email_id, user_id):
